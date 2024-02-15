@@ -2,7 +2,7 @@ use std::env;
 use std::io::{stdout, Write};
 use crate::config::_config_::{Command, Shell};
 use lazy_static::lazy_static;
-use crate::easy_shell::_easy_shell_::{Cd, Pwd};
+use crate::file_system::_easy_shell_::{Cd, Mkdir, Pwd};
 
 #[macro_export]
 macro_rules! color {
@@ -23,7 +23,8 @@ pub trait SyscallHandler {
 }
 
 lazy_static!{pub static ref CMD_LIST: Vec<Shell> = vec![Shell{name:"cd",handler:Cd::handler},
-                                                        Shell{name:"pwd",handler:Pwd::handler}];}
+                                                        Shell{name:"pwd",handler:Pwd::handler},
+                                                        Shell{name:"mkdir",handler:Mkdir::handler}];}
 
 
 pub mod _config_{
@@ -63,7 +64,7 @@ pub mod _config_{
                 let cmd = CMD_LIST.get(index).unwrap();
                 if cmd.name == input_command.command.as_str(){
                     return match { (cmd.handler)(&input_command) } {
-                        Ok(_r) => {
+                        Ok(_) => {
                             Command::reset_config(input_command);
                             true
                         }

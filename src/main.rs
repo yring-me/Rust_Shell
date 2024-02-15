@@ -1,6 +1,6 @@
 
 mod config;
-mod easy_shell;
+mod file_system;
 
 use std::io::stdin;
 use config::_config_;
