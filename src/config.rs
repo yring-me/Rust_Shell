@@ -3,6 +3,7 @@ use std::io::{stdout, Write};
 use crate::config::_config_::{Command, Shell};
 use lazy_static::lazy_static;
 use crate::file_system::_easy_shell_::{Cd, Mkdir, Pwd};
+use crate::ls::_ls_::Ls;
 
 #[macro_export]
 macro_rules! color {
@@ -16,7 +17,7 @@ macro_rules! color {
 }
 
 pub trait SyscallHandler {
-    fn handler(_cmd: &Command) -> Result<&str,&str> {
+    fn handler(_cmd: &Command) -> Result<&str,String> {
         println!("command no found!");
         Ok("")
     }
@@ -24,7 +25,8 @@ pub trait SyscallHandler {
 
 lazy_static!{pub static ref CMD_LIST: Vec<Shell> = vec![Shell{name:"cd",handler:Cd::handler},
                                                         Shell{name:"pwd",handler:Pwd::handler},
-                                                        Shell{name:"mkdir",handler:Mkdir::handler}];}
+                                                        Shell{name:"mkdir",handler:Mkdir::handler},
+                                                        Shell{name:"ls",handler:Ls::handler}];}
 
 
 pub mod _config_{
@@ -38,7 +40,7 @@ pub mod _config_{
     #[derive(Debug)]
     pub struct Shell{
         pub(crate) name:&'static str,
-        pub(crate) handler:fn(&Command)->Result<&str,&str>,
+        pub(crate) handler:fn(&Command)->Result<&str,String>,
     }
 
     impl Command {
@@ -82,7 +84,7 @@ pub mod _config_{
 }
 
 impl SyscallHandler for Command{
-    fn handler(_cmd:&Command) -> Result<&str,&str>{
+    fn handler(_cmd:&Command) -> Result<&str,String>{
         let current_dir = env::current_dir().unwrap().into_os_string().into_string().unwrap();
         println!(" {}  {}",color!("blue"),current_dir);
         print!("{}❯ {}",color!("green"),color!("reset"));

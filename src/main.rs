@@ -1,6 +1,7 @@
 
 mod config;
 mod file_system;
+mod ls;
 
 use std::io::stdin;
 use config::_config_;
