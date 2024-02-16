@@ -2,7 +2,7 @@ use std::env;
 use std::io::{stdout, Write};
 use crate::config::_config_::{Command, Shell};
 use lazy_static::lazy_static;
-use crate::file_system::_easy_shell_::{Cd, Mkdir, Pwd};
+use crate::file_system::_easy_shell_::{Cd, Clear, Mkdir, Pwd, Rm, Touch};
 use crate::ls::_ls_::Ls;
 
 #[macro_export]
@@ -26,7 +26,10 @@ pub trait SyscallHandler {
 lazy_static!{pub static ref CMD_LIST: Vec<Shell> = vec![Shell{name:"cd",handler:Cd::handler},
                                                         Shell{name:"pwd",handler:Pwd::handler},
                                                         Shell{name:"mkdir",handler:Mkdir::handler},
-                                                        Shell{name:"ls",handler:Ls::handler}];}
+                                                        Shell{name:"ls",handler:Ls::handler},
+                                                        Shell{name:"rm",handler:Rm::handler},
+                                                        Shell{name:"clear",handler:Clear::handler},
+                                                        Shell{name:"touch",handler:Touch::handler}];}
 
 
 pub mod _config_{
